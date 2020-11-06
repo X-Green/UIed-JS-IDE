@@ -65,15 +65,32 @@ public enum KeywordToken implements ITokenBase {
     VOLATILE,
     WHILE,
     WITH,
-    YIELD;
+    YIELD,
 
-    private final String realName;
+    GET_CLASS("getClass"),
+    JAVA,
+    JAVA_ARRAY("JavaArray"),
+    JAVA_CLASS("JavaClass"),
+    JAVA_OBJECT("JavaObject"),
+    JAVA_PACKAGE("JavaPackage");
+
+
+    private final String content;
 
     KeywordToken() {
-        this.realName = this.name().toLowerCase();
+        this.content = this.name().toLowerCase();
     }
 
-    public String getRealName() {
-        return this.realName;
+    KeywordToken(String s) {
+        this.content = s;
+    }
+
+    public String getContent() {
+        return this.content;
+    }
+
+    @Override
+    public String toString() {
+        return "Keyword Token OF {" + this.content + "}";
     }
 }

@@ -51,11 +51,8 @@ public class MatcherFactory {
         if (Character.isDigit(c)) {
             return new LiteralNumberTokenMatcher(source, pointer);
         }
-        if (Character.isJavaIdentifierStart(c)) {
-            return new CommonWordTokenMatcher(source, pointer, true);
-        }
         if (Character.isUnicodeIdentifierStart(c)) {
-            return new CommonWordTokenMatcher(source, pointer, false);
+            return new WordTokenMatcher(source, pointer);
         }
         if (StructureSignTokenMatcher.isStructureSign(c)) {
             return new StructureSignTokenMatcher(source, pointer);

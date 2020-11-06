@@ -1,6 +1,7 @@
 package dev.eeasee.js_uied_ide.parser.lex_analyzer.impl;
 
 import dev.eeasee.js_uied_ide.parser.container.TokenContainer;
+import dev.eeasee.js_uied_ide.parser.err.SyntaxException;
 import dev.eeasee.js_uied_ide.parser.lex_analyzer.AbstractTokenMatcher;
 import dev.eeasee.js_uied_ide.parser.lex_analyzer.ITokenMatcher;
 import dev.eeasee.js_uied_ide.parser.lex_analyzer.MatcherFactory;
@@ -26,12 +27,17 @@ public class CommentTokenMatcher extends AbstractTokenMatcher {
     @Override
     public ITokenMatcher analyzeNextToken(TokenContainer container) {
         while (true) {
-            char next;
-            try {
-                next = this.source[this.pointer];
-            } catch (ArrayIndexOutOfBoundsException e) {
-                return null;
+            if (this.pointer >= this.source.length) {
+                if (this.typeOfComment == CommentToken.Type.SINGLE_LINE) {
+                    String co = new String(this.source, this.initPointer, this.pointer - this.initPointer);
+                    container.add(CommentToken.of(co, CommentToken.Type.SINGLE_LINE));
+                    return null;
+                } else {
+                    throw new SyntaxException();
+                }
             }
+
+            char next = this.source[this.pointer];
 
             if (this.startOfMultiLineTerminatorFound) {
                 if (next == '/') {

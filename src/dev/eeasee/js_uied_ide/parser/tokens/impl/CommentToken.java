@@ -23,6 +23,7 @@ public class CommentToken implements ITokenBase {
         MULTI_LINE
     }
 
+    @Override
     public String toString() {
         return "Comment Token OF {" + this.content + "}";
     }
