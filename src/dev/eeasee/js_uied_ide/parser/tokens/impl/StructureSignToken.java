@@ -18,8 +18,15 @@ public enum StructureSignToken implements ITokenBase {
     DOT                     ('.');
 
 
+    public final char content;
+
     StructureSignToken(char c) {
-        StructureSignTokenMatcher.addStructureSign(c, this);
+        this.content = c;
+    }
+
+    @Override
+    public String toString() {
+        return "Structure Sign Token OF \" " + this.content + " \"";
     }
 
 }

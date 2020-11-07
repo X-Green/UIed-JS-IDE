@@ -32,12 +32,8 @@ public class WordTokenMatcher extends AbstractTokenMatcher {
     }
 
 
-    private final int initPointer;
-
-
     public WordTokenMatcher(char[] source, int pointer) {
         super(source, pointer);
-        this.initPointer = pointer;
     }
 
     @Override

@@ -2,5 +2,5 @@ package dev.eeasee.js_uied_ide.parser.tokens.impl;
 
 import dev.eeasee.js_uied_ide.parser.tokens.ITokenBase;
 
-public class IntegerToken implements ITokenBase {
+public class NumberToken implements ITokenBase {
 }

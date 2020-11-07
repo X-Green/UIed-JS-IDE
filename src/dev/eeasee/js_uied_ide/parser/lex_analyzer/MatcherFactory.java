@@ -5,23 +5,26 @@ import dev.eeasee.js_uied_ide.parser.err.SyntaxException;
 import dev.eeasee.js_uied_ide.parser.lex_analyzer.impl.*;
 import dev.eeasee.js_uied_ide.parser.tokens.impl.CommentToken;
 import dev.eeasee.js_uied_ide.parser.tokens.impl.LineTerminatorToken;
+import dev.eeasee.js_uied_ide.parser.tokens.impl.LiteralStringToken;
 import dev.eeasee.js_uied_ide.utils.CharPredicateInstances;
 
 public class MatcherFactory {
     public static ITokenMatcher getMatcher(char[] source, int pointer, TokenContainer tokenList) {
         char c;
 
-        try {
-            c = source[pointer];
-            while (Character.isWhitespace(c)) {
-                if (CharPredicateInstances.IS_LINE_TERMINATOR.test(c)) {
-                    tokenList.add(LineTerminatorToken.INSTANCE);
-                }
-                pointer++;
-                c = source[pointer];
-            }
-        } catch (ArrayIndexOutOfBoundsException e) {
+        if (pointer >= source.length) {
             return null;
+        }
+        c = source[pointer];
+        while (Character.isWhitespace(c)) {
+            if (CharPredicateInstances.IS_LINE_TERMINATOR.test(c)) {
+                tokenList.add(LineTerminatorToken.INSTANCE);
+            }
+            pointer++;
+            if (pointer >= source.length) {
+                return null;
+            }
+            c = source[pointer];
         }
 
         switch (c) {
@@ -44,9 +47,9 @@ public class MatcherFactory {
                     return null;
                 }
             case '\"':
-                return new LiteralStringTokenMatcher(source, pointer, true);
+                return new LiteralStringTokenMatcher(source, pointer, LiteralStringToken.Type.DOUBLE_QUOTE);
             case '\'':
-                return new LiteralStringTokenMatcher(source, pointer, false);
+                return new LiteralStringTokenMatcher(source, pointer, LiteralStringToken.Type.SINGLE_QUOTE);
         }
         if (Character.isDigit(c)) {
             return new LiteralNumberTokenMatcher(source, pointer);

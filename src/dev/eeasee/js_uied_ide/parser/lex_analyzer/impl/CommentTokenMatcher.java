@@ -13,15 +13,11 @@ public class CommentTokenMatcher extends AbstractTokenMatcher {
 
     private final CommentToken.Type typeOfComment;
 
-    private final int initPointer;
-
     public CommentTokenMatcher(char[] source, int pointer, CommentToken.Type type) {
         super(source, pointer);
 
         this.typeOfComment = type;
         // the next char must be '/' or '*', as type shows
-
-        this.initPointer = pointer;
     }
 
     @Override

@@ -4,7 +4,7 @@ import dev.eeasee.js_uied_ide.parser.lex_analyzer.MatcherFactory;
 
 public class JSParser {
     public static void main(String[] args) {
-        char[] source = ("/*abcd233*/\n\n\n//axsdbhxxhsdbdh\nxxx yyy this\nnimabi233").toCharArray();
+        char[] source = ("/*abcd233*/\n\'233333\'\n\n{//axsdbhxxhsdbdh\nxxx yyy this\nfb234").toCharArray();
         TokenContainer container = new TokenContainer();
 
         ITokenMatcher matcher = MatcherFactory.getMatcher(source, 0, container);
