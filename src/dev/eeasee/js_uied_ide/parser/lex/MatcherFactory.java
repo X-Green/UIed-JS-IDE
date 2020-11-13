@@ -1,8 +1,8 @@
-package dev.eeasee.js_uied_ide.parser.lex_analyzer;
+package dev.eeasee.js_uied_ide.parser.lex;
 
 import dev.eeasee.js_uied_ide.parser.container.TokenContainer;
 import dev.eeasee.js_uied_ide.parser.err.SyntaxException;
-import dev.eeasee.js_uied_ide.parser.lex_analyzer.impl.*;
+import dev.eeasee.js_uied_ide.parser.lex.impl.*;
 import dev.eeasee.js_uied_ide.parser.tokens.impl.CommentToken;
 import dev.eeasee.js_uied_ide.parser.tokens.impl.LineTerminatorToken;
 import dev.eeasee.js_uied_ide.parser.tokens.impl.LiteralStringToken;

@@ -1,6 +1,6 @@
 import dev.eeasee.js_uied_ide.parser.container.TokenContainer;
-import dev.eeasee.js_uied_ide.parser.lex_analyzer.ITokenMatcher;
-import dev.eeasee.js_uied_ide.parser.lex_analyzer.MatcherFactory;
+import dev.eeasee.js_uied_ide.parser.lex.ITokenMatcher;
+import dev.eeasee.js_uied_ide.parser.lex.MatcherFactory;
 
 import javax.script.ScriptEngine;
 import javax.script.ScriptEngineManager;

@@ -1,7 +1,6 @@
 package dev.eeasee.js_uied_ide.parser.tokens.impl;
 
 import dev.eeasee.js_uied_ide.parser.tokens.ITokenBase;
-import dev.eeasee.js_uied_ide.parser.lex_analyzer.impl.StructureSignTokenMatcher;
 
 public enum StructureSignToken implements ITokenBase {
     LEFT_ROUND_BRACKET      ('('),

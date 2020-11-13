@@ -1,9 +1,9 @@
-package dev.eeasee.js_uied_ide.parser.lex_analyzer.impl;
+package dev.eeasee.js_uied_ide.parser.lex.impl;
 
 import dev.eeasee.js_uied_ide.parser.container.TokenContainer;
-import dev.eeasee.js_uied_ide.parser.lex_analyzer.AbstractTokenMatcher;
-import dev.eeasee.js_uied_ide.parser.lex_analyzer.ITokenMatcher;
-import dev.eeasee.js_uied_ide.parser.lex_analyzer.MatcherFactory;
+import dev.eeasee.js_uied_ide.parser.lex.AbstractTokenMatcher;
+import dev.eeasee.js_uied_ide.parser.lex.ITokenMatcher;
+import dev.eeasee.js_uied_ide.parser.lex.MatcherFactory;
 import dev.eeasee.js_uied_ide.parser.tokens.impl.NameWordToken;
 
 public class WordTokenMatcher extends AbstractTokenMatcher {

@@ -1,4 +1,4 @@
-package dev.eeasee.js_uied_ide.parser.lex_analyzer;
+package dev.eeasee.js_uied_ide.parser.lex;
 
 public abstract class AbstractTokenMatcher implements ITokenMatcher {
     protected final char[] source;

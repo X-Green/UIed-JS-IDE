@@ -1,4 +1,4 @@
-package dev.eeasee.js_uied_ide.parser.lex_analyzer;
+package dev.eeasee.js_uied_ide.parser.lex;
 
 import dev.eeasee.js_uied_ide.parser.container.TokenContainer;
 
