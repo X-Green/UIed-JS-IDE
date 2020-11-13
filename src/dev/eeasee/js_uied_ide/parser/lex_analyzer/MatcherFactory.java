@@ -6,9 +6,12 @@ import dev.eeasee.js_uied_ide.parser.lex_analyzer.impl.*;
 import dev.eeasee.js_uied_ide.parser.tokens.impl.CommentToken;
 import dev.eeasee.js_uied_ide.parser.tokens.impl.LineTerminatorToken;
 import dev.eeasee.js_uied_ide.parser.tokens.impl.LiteralStringToken;
-import dev.eeasee.js_uied_ide.utils.CharPredicateInstances;
+import dev.eeasee.js_uied_ide.utils.CharPredicate;
 
 public class MatcherFactory {
+
+    public static final CharPredicate IS_LINE_TERMINATOR = c -> (c == '\n' || c == '\r' || c == '\u2028' || c == '\u2029');
+
     public static ITokenMatcher getMatcher(char[] source, int pointer, TokenContainer tokenList) {
         char c;
 
@@ -17,7 +20,7 @@ public class MatcherFactory {
         }
         c = source[pointer];
         while (Character.isWhitespace(c)) {
-            if (CharPredicateInstances.IS_LINE_TERMINATOR.test(c)) {
+            if (IS_LINE_TERMINATOR.test(c)) {
                 tokenList.add(LineTerminatorToken.INSTANCE);
             }
             pointer++;

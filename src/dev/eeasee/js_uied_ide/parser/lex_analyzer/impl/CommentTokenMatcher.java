@@ -6,7 +6,6 @@ import dev.eeasee.js_uied_ide.parser.lex_analyzer.AbstractTokenMatcher;
 import dev.eeasee.js_uied_ide.parser.lex_analyzer.ITokenMatcher;
 import dev.eeasee.js_uied_ide.parser.lex_analyzer.MatcherFactory;
 import dev.eeasee.js_uied_ide.parser.tokens.impl.CommentToken;
-import dev.eeasee.js_uied_ide.utils.CharPredicateInstances;
 
 public class CommentTokenMatcher extends AbstractTokenMatcher {
     private boolean startOfMultiLineTerminatorFound = false;
@@ -47,7 +46,7 @@ public class CommentTokenMatcher extends AbstractTokenMatcher {
                 }
             }
 
-            if (CharPredicateInstances.IS_LINE_TERMINATOR.test(next)) {
+            if (MatcherFactory.IS_LINE_TERMINATOR.test(next)) {
                 if (this.typeOfComment == CommentToken.Type.SINGLE_LINE) {
                     String co = new String(this.source, this.initPointer, this.pointer - this.initPointer);
                     container.add(CommentToken.of(co, CommentToken.Type.SINGLE_LINE));

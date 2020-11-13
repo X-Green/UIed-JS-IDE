@@ -17,28 +17,4 @@ public abstract class AbstractTokenMatcher implements ITokenMatcher {
     public int getPointer() {
         return this.pointer;
     }
-
-    public class CharIteratorImpl implements CharIterator {
-        @Override
-        public char next() {
-            try {
-                char c = source[pointer];
-                pointer++;
-                return c;
-            } catch (ArrayIndexOutOfBoundsException e) {
-                return (char) (4); // EOT
-            }
-        }
-
-        @Override
-        public void setPointer(int p) {
-            pointer = p;
-        }
-    }
-
-    public interface CharIterator {
-        char next();
-
-        void setPointer(int p);
-    }
 }
