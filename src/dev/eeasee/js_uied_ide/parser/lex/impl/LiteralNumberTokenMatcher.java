@@ -6,6 +6,7 @@ import dev.eeasee.js_uied_ide.parser.lex.AbstractTokenMatcher;
 import dev.eeasee.js_uied_ide.parser.lex.ITokenMatcher;
 import dev.eeasee.js_uied_ide.parser.lex.MatcherFactory;
 import dev.eeasee.js_uied_ide.parser.tokens.impl.NumberToken;
+import dev.eeasee.js_uied_ide.utils.CharPredicate;
 
 public class LiteralNumberTokenMatcher extends AbstractTokenMatcher {
 
@@ -30,7 +31,7 @@ public class LiteralNumberTokenMatcher extends AbstractTokenMatcher {
                 this.numberType = NumberToken.Type.OCTAL;
             }
 
-            if (this.pointer == this.initPointer + 2 && this.numberType == NumberToken.Type.OCTAL) {
+            if (this.pointer == this.initPointer + 1 && this.numberType == NumberToken.Type.OCTAL) {
                 switch (this.source[this.pointer]) {
                     case 'b':
                     case 'B':
@@ -41,6 +42,11 @@ public class LiteralNumberTokenMatcher extends AbstractTokenMatcher {
                     case 'x':
                     case 'X':
                         this.numberType = NumberToken.Type.HEXADECIMAL;
+                        this.pointer++;
+                        continue;
+
+                    case '.':
+                        this.numberType = NumberToken.Type.DECIMAL;
                         this.pointer++;
                         continue;
                 }
@@ -67,9 +73,37 @@ public class LiteralNumberTokenMatcher extends AbstractTokenMatcher {
     }
 
     private String concludeNumber() {
-        String num = new String(this.source, this.initPointer, this.pointer-this.initPointer);
-        //TODO: Verify the number
+        String num = new String(this.source, this.initPointer, this.pointer - this.initPointer);
+        boolean correct;
+        switch (this.numberType.radix) {
+            case 2:
+                correct = allMatches(num, LiteralNumberTokenMatcher::isBinNumberPart);
+                break;
+            case 8:
+                correct = allMatches(num, LiteralNumberTokenMatcher::isOctNumberPart);
+                break;
+            case 10:
+                correct = allMatches(num, LiteralNumberTokenMatcher::isDecNumberPart);
+                break;
+            case 16:
+                correct = allMatches(num, LiteralNumberTokenMatcher::isHexNumberPart);
+                break;
+            default:
+                throw new UnsupportedOperationException();
+        }
+
+        if (!correct) {
+            throw new SyntaxException(this.pointer);
+        }
         return num;
+    }
+
+    private static boolean allMatches(String s, CharPredicate predicate) {
+        boolean b = true;
+        for (int i = 0; i < s.length(); i++) {
+            b &= predicate.test(s.charAt(i));
+        }
+        return b;
     }
 
     private static boolean isBinNumberPart(char c) {
@@ -81,7 +115,7 @@ public class LiteralNumberTokenMatcher extends AbstractTokenMatcher {
     }
 
     private static boolean isDecNumberPart(char c) {
-        return (c >= '0' && c <= '9') || (c == 'E') || (c == 'e');
+        return (c >= '0' && c <= '9') || (c == 'E') || (c == 'e') || (c == '.') || (c == '-');
     }
 
     private static boolean isHexNumberPart(char c) {

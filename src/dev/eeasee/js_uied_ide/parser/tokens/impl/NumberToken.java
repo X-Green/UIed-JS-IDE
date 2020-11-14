@@ -38,7 +38,7 @@ public class NumberToken implements ITokenBase {
 
     @Override
     public String toString() {
-        return "Number Token OF {" + this.content + "}";
+        return "Number Token OF {" + this.content + "} AS "+ this.numberType.toString();
     }
 
     public enum Type {
