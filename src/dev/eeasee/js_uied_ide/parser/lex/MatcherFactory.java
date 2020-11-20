@@ -6,6 +6,7 @@ import dev.eeasee.js_uied_ide.parser.lex.impl.*;
 import dev.eeasee.js_uied_ide.parser.tokens.impl.CommentToken;
 import dev.eeasee.js_uied_ide.parser.tokens.impl.LineTerminatorToken;
 import dev.eeasee.js_uied_ide.parser.tokens.impl.LiteralStringToken;
+import dev.eeasee.js_uied_ide.parser.tokens.impl.OperatorToken;
 import dev.eeasee.js_uied_ide.utils.CharPredicate;
 
 public class MatcherFactory {
@@ -63,6 +64,9 @@ public class MatcherFactory {
         if (StructureSignTokenMatcher.isStructureSign(c)) {
             return new StructureSignTokenMatcher(source, pointer);
         }
-        return new OperatorTokenMatcher(source, pointer);
+        if (OperatorTokenMatcher.FIRST_CHAR_TO_OPERATOR_TOKENS.containsKey(c)) {
+            return new OperatorTokenMatcher(source, pointer);
+        }
+        throw new SyntaxException(pointer);
     }
 }

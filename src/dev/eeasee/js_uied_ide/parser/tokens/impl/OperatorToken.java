@@ -2,9 +2,14 @@ package dev.eeasee.js_uied_ide.parser.tokens.impl;
 
 import dev.eeasee.js_uied_ide.parser.lex.impl.OperatorTokenMatcher;
 import dev.eeasee.js_uied_ide.parser.tokens.ITokenBase;
+import dev.eeasee.js_uied_ide.utils.ObjectArray;
+import it.unimi.dsi.fastutil.chars.Char2ObjectMap;
+import it.unimi.dsi.fastutil.chars.Char2ObjectOpenHashMap;
+import it.unimi.dsi.fastutil.chars.CharArraySet;
+import it.unimi.dsi.fastutil.chars.CharSet;
 
-import java.util.Collection;
-import java.util.EnumSet;
+import java.util.HashSet;
+import java.util.Set;
 
 public enum OperatorToken implements ITokenBase {
     ASSIGNMENT                      ("=", OperatorType.ASSIGNMENT),
@@ -61,32 +66,77 @@ public enum OperatorToken implements ITokenBase {
     private final OperatorType type;
 
     private boolean sealed = false;
-    public final EnumSet<OperatorToken> tokensPrefixingThis = EnumSet.noneOf(OperatorToken.class);
+    public Char2ObjectMap<ObjectArray<OperatorToken>> tokensPrefixingThis = new Char2ObjectOpenHashMap<>();
 
-    private OperatorToken(String s, OperatorType type) {
-
-        this.content = s;
-        this.type = type;
+    static {
+        for (OperatorToken operatorToken : OperatorToken.values()) {
+            operatorToken.seal();
+        }
     }
 
-    public void seal() {
-        for (OperatorToken token : OperatorToken.values()) {
-            String s = token.content;
+    OperatorToken(String s, OperatorType type) {
+        this.content = s;
+        this.type = type;
+        addToFirstCharToSetMap();
+    }
+
+    private void addToFirstCharToSetMap() {
+        char key = this.content.charAt(0);
+        Set<OperatorToken> tokenSet;
+        if (OperatorTokenMatcher.FIRST_CHAR_TO_OPERATOR_TOKENS.containsKey(key)) {
+            tokenSet = OperatorTokenMatcher.FIRST_CHAR_TO_OPERATOR_TOKENS.get(key);
+        } else {
+            tokenSet = new HashSet<>();
+            OperatorTokenMatcher.FIRST_CHAR_TO_OPERATOR_TOKENS.put(key, tokenSet);
+        }
+        tokenSet.add(this);
+    }
+
+    private void seal() {
+        Char2ObjectMap<Set<OperatorToken>> char2TokenSetMap = new Char2ObjectOpenHashMap<>();
+        for (OperatorToken tokenSubThis : OperatorToken.values()) {
+            String s = tokenSubThis.content;
             if (s.length() > this.content.length()) {
                 if (s.startsWith(this.content)) {
-                    tokensPrefixingThis.add(token);
+                    char key = tokenSubThis.content.charAt(this.content.length());
+                    Set<OperatorToken> tokenSet;
+                    if (char2TokenSetMap.containsKey(key)) {
+                        tokenSet = char2TokenSetMap.get(key);
+                    } else {
+                        tokenSet = new HashSet<>();
+                        char2TokenSetMap.put(key, tokenSet);
+                    }
+                    tokenSet.add(tokenSubThis);
                 }
             }
         }
-        OperatorTokenMatcher.TOKEN_SET_LIST.get(this.content.length()).add(this);
+        for (Char2ObjectMap.Entry<Set<OperatorToken>> entry : char2TokenSetMap.char2ObjectEntrySet()) {
+            Set<OperatorToken> tokenSet = entry.getValue();
+            char charKey = entry.getCharKey();
+            ObjectArray<OperatorToken> tokenArrayObject = new ObjectArray<>(tokenSet.toArray());
+            this.tokensPrefixingThis.put(charKey, tokenArrayObject);
+        }
+
+        if (this.tokensPrefixingThis.isEmpty()) {
+            this.tokensPrefixingThis = null;
+        }
+
         sealed = true;
     }
 
-    public Collection<OperatorToken> getTokensPrefixingThis() {
+    public ObjectArray<OperatorToken> getTokensPrefixingThisAtCharOf(char c) {
         if (!sealed) {
             throw new UnsupportedOperationException();
         }
-        return this.tokensPrefixingThis;
+        return this.tokensPrefixingThis.getOrDefault(c, null);
+    }
+
+    public String getContent() {
+        return content;
+    }
+
+    public OperatorType getType() {
+        return type;
     }
 
     public enum OperatorType {
@@ -99,7 +149,7 @@ public enum OperatorToken implements ITokenBase {
         CONDITIONAL;
 
 
-        private OperatorType() {
+        OperatorType() {
 
         }
     }

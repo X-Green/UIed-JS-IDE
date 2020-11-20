@@ -2,7 +2,7 @@ package dev.eeasee.js_uied_ide.parser.lex;
 
 public abstract class AbstractTokenMatcher implements ITokenMatcher {
     protected final char[] source;
-    protected int pointer = 0;
+    protected int pointer;
     protected final int initPointer;
 
     protected AbstractTokenMatcher(char[] source, int pointer) {

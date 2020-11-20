@@ -4,11 +4,18 @@ import dev.eeasee.js_uied_ide.parser.container.TokenContainer;
 import dev.eeasee.js_uied_ide.parser.lex.AbstractTokenMatcher;
 import dev.eeasee.js_uied_ide.parser.lex.ITokenMatcher;
 import dev.eeasee.js_uied_ide.parser.tokens.impl.OperatorToken;
+import it.unimi.dsi.fastutil.chars.Char2ObjectOpenHashMap;
 
-import java.util.ArrayList;
 import java.util.EnumSet;
+import java.util.Set;
 
 public class OperatorTokenMatcher extends AbstractTokenMatcher {
+
+    public static Char2ObjectOpenHashMap<Set<OperatorToken>> FIRST_CHAR_TO_OPERATOR_TOKENS = new Char2ObjectOpenHashMap<>();
+
+    private OperatorToken operatorTillLastChar = null;
+
+    private Set<OperatorToken> operatorTokenCandidate = EnumSet.noneOf(OperatorToken.class);
 
     public OperatorTokenMatcher(char[] source, int pointer) {
         super(source, pointer);
@@ -16,14 +23,14 @@ public class OperatorTokenMatcher extends AbstractTokenMatcher {
 
     @Override
     public ITokenMatcher analyzeNextToken(TokenContainer container) {
-        return null;
-    }
+        while (true) {
+            if (this.pointer >= this.source.length) {
+                container.add(this.operatorTillLastChar);
+            }
 
-    public final static ArrayList<EnumSet<OperatorToken>> TOKEN_SET_LIST = new ArrayList<>(4);
+            if (operatorTillLastChar == null) {
 
-    static {
-        for (int i = 0; i < 4; i++) {
-            TOKEN_SET_LIST.add(EnumSet.noneOf(OperatorToken.class));
+            }
         }
     }
 }
